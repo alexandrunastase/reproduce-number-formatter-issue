@@ -1,0 +1,43 @@
+FROM php:8.1.25-fpm-alpine
+
+LABEL maintainer="alexandrunastase@github"
+
+# Add PHP user
+ARG PHP_USER_ID=1000
+ARG PHP_GROUP_ID=1000
+RUN set -x \
+    && addgroup -g $PHP_GROUP_ID -S php \
+    && adduser -u $PHP_USER_ID -D -S -G php php
+
+# Install dependencies
+RUN set -ex \
+    && docker-php-source extract \
+    && apk add --update --virtual --no-cache \
+    ${PHPIZE_DEPS} \
+    # linux-headers was required by xdebug
+    linux-headers \
+    curl \
+    # Runtime deps
+    icu-dev icu-libs \
+    libzip-dev zlib-dev \
+    libxml2-dev \
+    oniguruma-dev \
+    postgresql-dev \
+    && pecl install xdebug-3.2.1 \
+    && docker-php-ext-install intl opcache pdo_pgsql zip bcmath mbstring sockets pcntl soap sockets ctype > /dev/null \
+    && docker-php-ext-enable intl opcache pdo_pgsql zip bcmath mbstring sockets pcntl soap sockets ctype xdebug \
+    && apk del ${PHPIZE_DEPS} \
+    && apk del postgresql-dev \
+    && docker-php-source delete
+
+COPY ./docker/service/www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY ./docker/service/php.ini $PHP_INI_DIR/conf.d/99-app.ini
+COPY ./docker/service/xdebug.ini $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+COPY --chown=php . /app
+USER php
+WORKDIR /app
+
+USER php

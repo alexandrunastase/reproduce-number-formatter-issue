@@ -1,0 +1,31 @@
+version: '3.5'
+
+services:
+    sandbox:
+        container_name: sandbox
+        build:
+            context: .
+        volumes:
+            - .:/app:cached
+            - sandbox-composer-cache:/home/php/.composer/cache
+            - ./docker/service/php.ini:/usr/local/etc/php/conf.d/99-app.ini
+            - ./docker/service/www.conf:/usr/local/etc/php-fpm.d/www.conf
+        restart: unless-stopped
+        networks:
+            - sandbox-network
+        env_file: ./.env.local
+
+volumes:
+    sandbox-composer-cache:
+        driver: "local"
+    app-var:
+        driver: local
+        driver_opts:
+            type: none
+            device: $PWD/var
+            o: bind
+networks:
+    sandbox-network:
+        driver: "bridge"
+    default:
+        name: sandbox-network
