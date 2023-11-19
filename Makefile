@@ -14,10 +14,10 @@ stop:
 	docker compose stop
 
 enter:
-	docker compose exec --user="php" sandbox-service /bin/sh
+	docker compose exec --user="php" sandbox /bin/sh
 
 enter-new:
-	docker compose exec --user="php" sandbox-service-new /bin/sh
+	docker compose exec --user="php" sandbox-new /bin/sh
 
 test:
 	docker compose exec --user="php" -T sandbox /bin/sh -c './vendor/bin/phpunit  /app/tests/'

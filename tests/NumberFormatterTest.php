@@ -16,6 +16,11 @@ class NumberFormatterTest extends TestCase
         $this->assertSame($parsedValue, $formatter->parse($stringValue));
     }
 
+//    public function testConstant()
+//    {
+//        $this->assertSame('', INTL_ICU_VERSION);
+//    }
+
     public function provideValidValues(): array
     {
         return [
