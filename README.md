@@ -1,8 +1,8 @@
 # Reproducing the number formatter issue
 
 > 1. Run `make run` to start the docker containers
-> 2. Run `make test` to tun the version with PHP 8.1.3
-> 3. Run `make test-new` to tun the version with PHP 8.1.20
+> 2. Run `make test` to run the test with PHP 8.1.3
+> 3. Run `make test-new` to run the test with PHP 8.1.20
 
 ```php
 $formatter = new NumberFormatter('de_DE', NumberFormatter::DECIMAL);
