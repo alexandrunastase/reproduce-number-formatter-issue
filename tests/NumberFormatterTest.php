@@ -13,7 +13,11 @@ class NumberFormatterTest extends TestCase
     {
         $formatter = new NumberFormatter('de_DE', NumberFormatter::DECIMAL);
 
-        $this->assertSame($parsedValue, $formatter->parse($stringValue));
+        $this->assertSame(
+            $parsedValue,
+            $formatter->parse($stringValue, NumberFormatter::TYPE_DOUBLE),
+            "ICU error: ({$formatter->getErrorCode()}) {$formatter->getErrorMessage()}",
+        );
     }
 
 //    public function testConstant()
