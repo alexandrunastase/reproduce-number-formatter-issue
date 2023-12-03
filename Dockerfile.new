@@ -18,7 +18,7 @@ RUN set -ex \
     linux-headers \
     curl \
     # Runtime deps
-    icu-dev icu-libs \
+    icu-dev icu-libs icu-data-full \
     libzip-dev zlib-dev \
     libxml2-dev \
     oniguruma-dev \
